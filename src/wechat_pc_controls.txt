@@ -1,0 +1,5 @@
+微信窗口标题：
+微信
+
+控件列表：
+name=Weixin | type=Pane | rect=(L3034, T504, R3035, B505)

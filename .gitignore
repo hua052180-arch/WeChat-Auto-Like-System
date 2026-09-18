@@ -1,0 +1,21 @@
+# Runtime output and local machine state
+src/logs/
+src/debug_pc_wechat/
+src/__pycache__/
+**/__pycache__/
+*.pyc
+*.bak
+scripts/logs/
+data/*.db
+data/*.txt
+
+# Captured screenshots and temporary recordings
+screenshots/
+*.tmp
+*.mp4
+
+# Local editor/system files
+.vscode/
+.idea/
+Thumbs.db
+Desktop.ini

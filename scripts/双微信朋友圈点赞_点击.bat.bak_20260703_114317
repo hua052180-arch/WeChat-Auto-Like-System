@@ -1,0 +1,21 @@
+﻿@echo off
+chcp 65001 >nul
+title Double WeChat Like Starter
+
+echo ========================================
+echo Double WeChat Like Starter
+echo 自动检测当前微信 PID
+echo ========================================
+echo.
+
+cd /d "E:\wechat_like_helper\src"
+
+echo Current folder:
+echo %cd%
+echo.
+
+python -X utf8 -u .\wechat_multi_process_manager.py
+
+echo.
+echo 程序已退出。
+pause

@@ -1,0 +1,33 @@
+﻿@echo off
+chcp 65001 >nul
+title Double WeChat Like Auto PID Starter
+
+echo ========================================
+echo Double WeChat Like Auto PID Starter
+echo ========================================
+echo.
+
+cd /d "E:\wechat_like_helper\src"
+
+echo Current folder:
+echo %cd%
+echo.
+
+echo [1] 清理旧 worker，避免继续绑定旧 PID...
+powershell -NoProfile -Command "Get-CimInstance Win32_Process | Where-Object { $_.CommandLine -like '*wechat_like_worker_by_pid.py*' } | ForEach-Object { Write-Host '停止旧 worker PID=' $_.ProcessId; Stop-Process -Id $_.ProcessId -Force }"
+
+echo.
+echo [2] 清理旧 keeper...
+powershell -NoProfile -Command "Get-CimInstance Win32_Process | Where-Object { $_.CommandLine -like '*vm_moments_topmost_keeper.py*' } | ForEach-Object { Write-Host '停止旧 keeper PID=' $_.ProcessId; Stop-Process -Id $_.ProcessId -Force }"
+
+echo.
+echo [3] 自动检测当前两个微信窗口 PID，并重新启动点赞...
+python -X utf8 -u "E:\wechat_like_helper\src\wechat_multi_process_manager.py"
+
+echo.
+echo ========================================
+echo 已完成启动。
+echo 如果微信 PID 变了，这次已经重新检测。
+echo ========================================
+echo.
+pause
