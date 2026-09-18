@@ -1,6 +1,7 @@
 # Runtime output and local machine state
 src/logs/
 src/debug_pc_wechat/
+src/graphics_capture_test/
 src/__pycache__/
 **/__pycache__/
 *.pyc
