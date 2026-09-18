@@ -56,7 +56,7 @@ MOMENTS_WINDOW_Y = 0
 MOMENTS_WINDOW_WIDTH = 576
 MOMENTS_WINDOW_HEIGHT = 558
 
-MOMENTS_WINDOW_TOPMOST = True
+MOMENTS_WINDOW_TOPMOST = False
 MOMENTS_TITLE_TEMPLATE = WORKDIR / "debug_pc_wechat" / "moments_title_template.png"
 
 
@@ -677,7 +677,8 @@ def main():
         MOMENTS_WINDOW_HEIGHT,
     ) = args.moments
 
-    MOMENTS_WINDOW_TOPMOST = not args.no_topmost
+    # 默认不置顶；保留 --no-topmost 参数兼容旧启动脚本。
+    MOMENTS_WINDOW_TOPMOST = False
 
     os.chdir(str(WORKDIR))
 

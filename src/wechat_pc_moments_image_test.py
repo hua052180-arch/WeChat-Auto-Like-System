@@ -71,7 +71,7 @@ MOMENTS_WINDOW_WIDTH = 576
 MOMENTS_WINDOW_HEIGHT = 558
 
 # 是否让朋友圈窗口置顶
-MOMENTS_WINDOW_TOPMOST = True
+MOMENTS_WINDOW_TOPMOST = False
 
 
 class _FixedRegion:
@@ -133,7 +133,7 @@ class _MomentsRegionWindow:
             win32gui.SetForegroundWindow(hwnd)
             win32gui.SetWindowPos(
                 hwnd,
-                win32con.HWND_TOPMOST,
+                win32con.HWND_NOTOPMOST,
                 0,
                 0,
                 0,
