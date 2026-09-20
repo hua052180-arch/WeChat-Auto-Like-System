@@ -797,8 +797,9 @@ def find_more_button_by_dots(
     """
     height, width = image.shape[:2]
 
-    # 只看最右侧，避免识别到封面图、头像、文字区域
-    roi_x1 = int(width * 0.80)
+    # 只扫描截图最右侧 50%，覆盖不同微信版本中位置变化的“...”按钮。
+    # 后续仍用候选中心点的右侧安全区校验，避免误识别正文元素。
+    roi_x1 = int(width * 0.50)
 
     # 扫描标题栏以下的整个帖子区域；滚动后按钮可能出现在上半部。
     roi_y1 = int(height * 0.18)
