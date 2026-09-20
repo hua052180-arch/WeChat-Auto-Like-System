@@ -2385,16 +2385,21 @@ def click_moments_icon_by_image(window) -> None:
             f"[阶段1] 发现页截图已保存：{after_path.resolve()}"
         )
 
-        # 新版微信在“发现”页内展示朋友圈入口，需要再次双击。
-        ref_w, ref_h = DISCOVER_REFERENCE_SIZE
+        # 新版微信在“发现”页内展示朋友圈入口，直接识别“朋友圈”图标+文字模板。
         page_h, page_w = after_image.shape[:2]
-        moments_x = int(round(DISCOVER_MOMENTS_POINT[0] * page_w / ref_w))
-        moments_y = int(round(DISCOVER_MOMENTS_POINT[1] * page_h / ref_h))
-
-        if not (0 <= moments_x < page_w and 0 <= moments_y < page_h):
-            raise RuntimeError(
-                f"发现页朋友圈入口坐标超出截图范围：({moments_x}, {moments_y})"
-            )
+        entry_point = find_template_in_region(
+            after_image,
+            CHAIN1_MOMENTS_TITLE_TEMPLATE_PATH,
+            0.02,
+            0.55,
+            y1_ratio=0.05,
+            y2_ratio=0.55,
+            debug_name="discover_moments_entry_match.png",
+            threshold=0.48,
+        )
+        if entry_point is None:
+            raise RuntimeError("发现页未识别到‘朋友圈’入口，未执行双击")
+        moments_x, moments_y = entry_point
 
         # 保存点击前的局部证据，便于确认微信版本是否改变了入口位置。
         crop_x1 = max(0, moments_x - 100)
@@ -2522,10 +2527,20 @@ def click_moments_icon_by_image(window) -> None:
         f"[阶段1] 发现页截图已保存：{after_path.resolve()}"
     )
 
-    ref_w, ref_h = DISCOVER_REFERENCE_SIZE
     page_h, page_w = after_image.shape[:2]
-    moments_x = int(round(DISCOVER_MOMENTS_POINT[0] * page_w / ref_w))
-    moments_y = int(round(DISCOVER_MOMENTS_POINT[1] * page_h / ref_h))
+    entry_point = find_template_in_region(
+        after_image,
+        CHAIN1_MOMENTS_TITLE_TEMPLATE_PATH,
+        0.02,
+        0.55,
+        y1_ratio=0.05,
+        y2_ratio=0.55,
+        debug_name="discover_moments_entry_match.png",
+        threshold=0.48,
+    )
+    if entry_point is None:
+        raise RuntimeError("发现页未识别到‘朋友圈’入口，未执行双击")
+    moments_x, moments_y = entry_point
     double_click_window_point(window, moments_x, moments_y)
     time.sleep(2.5)
     moments_image = capture_wechat_window(window)
