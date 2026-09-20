@@ -820,15 +820,15 @@ def find_more_button_by_dots(
     h_channel, s_channel, v_channel = cv2.split(hsv)
 
     bg_mask = (
-        (v_channel >= 35)
-        & (v_channel <= 120)
-        & (s_channel <= 90)
+        (v_channel >= 25)
+        & (v_channel <= 160)
+        & (s_channel <= 110)
     ).astype(np.uint8) * 255
 
     bg_mask = cv2.morphologyEx(
         bg_mask,
         cv2.MORPH_CLOSE,
-        np.ones((5, 5), np.uint8),
+        np.ones((3, 3), np.uint8),
     )
 
     contours, _ = cv2.findContours(
@@ -844,18 +844,18 @@ def find_more_button_by_dots(
 
         area = w * h
 
-        if area < 300 or area > 2200:
+        if area < 180 or area > 3200:
             continue
 
-        if w < 22 or w > 75:
+        if w < 18 or w > 90:
             continue
 
-        if h < 15 or h > 45:
+        if h < 12 or h > 55:
             continue
 
         ratio = w / max(h, 1)
 
-        if ratio < 1.0 or ratio > 4.0:
+        if ratio < 0.8 or ratio > 5.0:
             continue
 
         abs_x = roi_x1 + x
@@ -883,7 +883,7 @@ def find_more_button_by_dots(
         )
 
         dot_mask = (
-            candidate_gray >= 100
+            candidate_gray >= 85
         ).astype(np.uint8) * 255
 
         dot_mask = cv2.morphologyEx(
@@ -904,7 +904,7 @@ def find_more_button_by_dots(
             dx, dy, dw, dh = cv2.boundingRect(dot_contour)
             dot_area = cv2.contourArea(dot_contour)
 
-            if dot_area < 2 or dot_area > 60:
+            if dot_area < 1 or dot_area > 80:
                 continue
 
             if dw < 2 or dw > 12:
@@ -930,10 +930,10 @@ def find_more_button_by_dots(
                 y_span = abs(p1[1] - p2[1])
                 x_gap = abs(p1[0] - p2[0])
 
-                if y_span > 8:
+                if y_span > 10:
                     continue
 
-                if not (4 <= x_gap <= 22):
+                if not (3 <= x_gap <= 28):
                     continue
 
                 has_two_dots = True
@@ -1007,12 +1007,9 @@ def find_more_button_by_dots(
     center_x = int(x + w / 2)
     center_y = int(y + h / 2)
 
-    if (
-        center_x < int(width * 0.86)
-        or center_y < int(height * 0.58)
-    ):
+    if center_x < int(width * 0.78):
         print(
-            f"[更多按钮] 候选位置不在右下安全区，跳过："
+            f"[更多按钮] 候选位置不在右侧安全区，跳过："
             f"({center_x}, {center_y})"
         )
         return None
